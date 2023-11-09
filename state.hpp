@@ -1,6 +1,8 @@
 #if !defined(MARCH_STATE_H_)
 #define MARCH_STATE_H_
 
+#include <string>
+
 namespace march
 {
     class node;
@@ -26,6 +28,7 @@ namespace march
 
     public:
         STATE_TYPE get_type() const { return m_type; };
+        virtual std::string get_name() const = 0;
         virtual void update() = 0;
 
     protected:
@@ -45,6 +48,7 @@ namespace march
 
     public:
         void update();
+        std::string get_name() const { return "INITIALIZE"; };
     };
 
     // =========================================================
@@ -57,6 +61,20 @@ namespace march
 
     public:
         void update();
+        std::string get_name() const { return "IDLE"; };
+    };
+
+    // =========================================================
+
+    class charging : public state
+    {
+    public:
+        charging(node &node) : state(STATE_TYPE::CHARGING, node){};
+        ~charging(){};
+
+    public:
+        void update();
+        std::string get_name() const { return "CHARGING"; };
     };
 
 }

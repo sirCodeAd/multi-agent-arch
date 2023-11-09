@@ -9,47 +9,42 @@
 #include "information.hpp"
 #include "action.hpp"
 
+static int node_count = 0; // Used to assign unique IDs to nodes
+
 namespace march
 {
-
-    static int node_count = 0; // Used to assign unique IDs to nodes
-
     class node
     {
     public:
-        node() : information(node_count++), state(new initialize(*this)), action_stack({}) { state->update(); };
-        ~node()
-        {
-            delete state;
-
-            // for (auto action : action_stack)
-            // {
-            //     delete action;
-            // }
-        };
+        node() : information(node_count++), state(new initialize(*this)), action_stack({}){};
+        ~node() { delete state; };
 
     public:
         void print(std::string message)
         {
-            std::cout << "[ Node " << information.get_ID() << " ]: " << message << std::endl;
+            std::cout << "[ Node " << information.get_ID() << " ( STATE: " << get_state()->get_name() << " ) ]: " << message << std::endl;
         }
 
     public:
         void add_action(march::action *action) { action_stack.push_back(action); };
         void execute_stack()
         {
-            for (auto action : action_stack)
+
+            while (!action_stack.empty())
             {
-                action->execute();
-                delete action;
+                action_stack.back()->execute();
+                delete action_stack.back(); // Deallocate memory
+                action_stack.pop_back();
             }
+
+            // state->update();
         };
 
         void change_state(march::state *new_state)
         {
             delete state;
             state = new_state;
-            state->update();
+            // state->update();
         };
 
     public:
@@ -63,7 +58,6 @@ namespace march
     private:
         std::vector<march::action *> action_stack;
     };
-
 }
 
 #endif // MARCH_NODE_H_

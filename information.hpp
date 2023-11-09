@@ -8,7 +8,7 @@ namespace march
     class information
     {
     public:
-        information(int ID_) : ID(ID_){};
+        information(int ID_) : ID(ID_), battery_level(rand() % 100), destination(rand() % 100), position(rand() % 100){};
         ~information(){};
 
     public:
@@ -21,9 +21,9 @@ namespace march
         // These functions are used to update the information of the node,
         // which will be the beliefs upon which the node will act and make decisions.
 
-        int update_battery_level() { return battery_level = rand() % 100; };
-        int update_destination() { return destination = rand() % 100; };
-        int update_position() { return position = rand() % 100; };
+        int update_battery_level(int amount) { return battery_level = amount; };
+        int update_destination(int new_destination) { return destination = new_destination; };
+        int update_position(int new_position) { return position = new_position; };
 
     private:
         int ID;
