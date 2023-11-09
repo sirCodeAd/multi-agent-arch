@@ -7,10 +7,13 @@ int main(int, char **)
 {
 
     march::node node_a = march::node();
-    // march::node node_b = march::node();
+    march::node node_b = march::node();
 
     node_a.get_state()->update();
     node_a.execute_stack();
+
+    node_b.get_state()->update();
+    node_b.execute_stack();
 
     int iterations = 0;
 
@@ -24,6 +27,11 @@ int main(int, char **)
 
         node_a.get_state()->update();
         node_a.execute_stack();
+
+        std::cout << std::endl;
+
+        node_b.get_state()->update();
+        node_b.execute_stack();
     }
 
     return 0;

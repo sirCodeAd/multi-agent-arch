@@ -33,18 +33,15 @@ namespace march
             while (!action_stack.empty())
             {
                 action_stack.back()->execute();
-                delete action_stack.back(); // Deallocate memory
+                delete action_stack.back();
                 action_stack.pop_back();
             }
-
-            // state->update();
         };
 
         void change_state(march::state *new_state)
         {
             delete state;
             state = new_state;
-            // state->update();
         };
 
     public:
