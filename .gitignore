@@ -1,0 +1,26 @@
+# CMake-generated files
+build/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+compile_commands.json
+
+# Compiled object files and executables
+*.o
+*.obj
+*.exe
+
+# Libraries
+*.a
+*.lib
+
+# IDE files
+.vscode/
+.idea/
+*.suo
+*.user
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.opensdf
+*.sdf
