@@ -3,6 +3,8 @@
 
 #include <string>
 
+#include "message.hpp"
+
 namespace march
 {
 
@@ -12,7 +14,8 @@ namespace march
     {
         UPDATE_BELIEFS,
         CHARGE_BATTERY,
-        BROADCAST_MESSAGE
+        BROADCAST_MESSAGE,
+        MOVING
     };
 
     // =========================================================
@@ -21,11 +24,11 @@ namespace march
 
     /**
      * IMPLEMENTS STRATEGY PATTERN
-    */
+     */
     class action
     {
     public:
-        action(march::node &node_, ACTION_TYPE type) : m_node(node_){};
+        action(march::node &node, ACTION_TYPE type) : m_node(node){};
         virtual ~action() = default;
 
     public:
@@ -43,7 +46,7 @@ namespace march
     class update_beliefs : public action
     {
     public:
-        update_beliefs(march::node &node_) : action(node_, ACTION_TYPE::UPDATE_BELIEFS){};
+        update_beliefs(march::node &node) : action(node, ACTION_TYPE::UPDATE_BELIEFS){};
         ~update_beliefs(){};
 
     public:
@@ -53,7 +56,7 @@ namespace march
     class charge_battery : public action
     {
     public:
-        charge_battery(march::node &node_) : action(node_, ACTION_TYPE::CHARGE_BATTERY){};
+        charge_battery(march::node &node) : action(node, ACTION_TYPE::CHARGE_BATTERY){};
         ~charge_battery(){};
 
     public:
@@ -63,7 +66,8 @@ namespace march
     class broadcast_message : public action
     {
     public:
-        broadcast_message(march::node &node_, std::string message) : action(node_, ACTION_TYPE::BROADCAST_MESSAGE){};
+        broadcast_message(march::node &node, march::MESSAGE_TYPE type, std::string message)
+            : action(node, ACTION_TYPE::BROADCAST_MESSAGE), m_message(message), m_message_type(type){};
         ~broadcast_message(){};
 
     public:
@@ -71,8 +75,22 @@ namespace march
 
     private:
         std::string m_message;
+        march::MESSAGE_TYPE m_message_type;
     };
 
-}
+    class move_to : public action
+    {
+    public:
+        move_to(march::node &node, int new_position) : action(node, ACTION_TYPE::MOVING), m_new_position(new_position){};
+        ~move_to(){};
+
+    public:
+        void execute();
+
+    private:
+        int m_new_position;
+    };
+
+} // namespace march
 
 #endif // MARCH_ACTION_H_

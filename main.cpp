@@ -16,13 +16,6 @@ int main(int, char **)
 
     while (true)
     {
-
-        // Some empty space
-        // std::cout << std::endl
-        //           << std::endl
-        //           << std::endl;
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-
         std::cout << "====================" << std::endl;
         std::cout << "Iteration: " << iterations++ << std::endl;
         std::cout << "====================" << std::endl;
@@ -37,12 +30,17 @@ int main(int, char **)
 
         // Clear message buffer
 
+        for (auto message : message_buffer)
+            delete message;
+
         message_buffer.clear();
 
         // Some empty space
         std::cout << std::endl
                   << std::endl
                   << std::endl;
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
 
     return 0;
