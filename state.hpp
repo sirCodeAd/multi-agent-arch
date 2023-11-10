@@ -3,6 +3,8 @@
 
 #include <string>
 
+#include "action.hpp"
+
 namespace march
 {
     class node;
@@ -56,12 +58,15 @@ namespace march
     class idle : public state
     {
     public:
-        idle(node &node) : state(STATE_TYPE::IDLE, node){};
+        idle(node &node) : state(STATE_TYPE::IDLE, node) { start_idle(); };
         ~idle(){};
 
     public:
         void update();
         std::string get_name() const { return "IDLE"; };
+
+    private:
+        void start_idle();
     };
 
     // =========================================================
@@ -76,7 +81,6 @@ namespace march
         void update();
         std::string get_name() const { return "CHARGING"; };
     };
-
 }
 
 #endif // MARCH_STATE_H_

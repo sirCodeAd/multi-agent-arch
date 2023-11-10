@@ -1,6 +1,8 @@
 #if !defined(MARCH_ACTION_H_)
 #define MARCH_ACTION_H_
 
+#include <string>
+
 namespace march
 {
 
@@ -9,7 +11,8 @@ namespace march
     enum ACTION_TYPE
     {
         UPDATE_BELIEFS,
-        CHARGE_BATTERY
+        CHARGE_BATTERY,
+        BROADCAST_MESSAGE
     };
 
     // =========================================================
@@ -52,6 +55,19 @@ namespace march
 
     public:
         void execute();
+    };
+
+    class broadcast_message : public action
+    {
+    public:
+        broadcast_message(march::node &node_, std::string message) : action(node_, ACTION_TYPE::BROADCAST_MESSAGE){};
+        ~broadcast_message(){};
+
+    public:
+        void execute();
+
+    private:
+        std::string m_message;
     };
 
 }

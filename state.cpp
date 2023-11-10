@@ -6,7 +6,6 @@
 
 namespace march
 {
-
     // Initialize State =========================================================
 
     auto initialize::update() -> void
@@ -17,12 +16,14 @@ namespace march
 
     // Idle State =========================================================
 
+    void idle::start_idle() { m_node.add_action(new march::broadcast_message(m_node, "HELLO")); }
+
     auto idle::update() -> void
     {
 
         if (m_node.get_information().get_battery_level() < m_node.get_information().get_destination())
         {
-            m_node.print("Battery level is low, switching to charging state");
+            m_node.print("Battery level is low, switching to chxarging state");
             m_node.change_state(new charging(m_node));
             return;
         }
@@ -44,5 +45,4 @@ namespace march
         m_node.add_action(new march::update_beliefs(m_node));
         m_node.add_action(new march::charge_battery(m_node));
     }
-
 }
