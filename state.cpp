@@ -23,7 +23,7 @@ namespace march
 
         if (m_node.get_information().get_battery_level() < m_node.get_information().get_destination())
         {
-            m_node.print("Battery level is low, switching to chxarging state");
+            m_node.print("Battery level is low, switching to charging state");
             m_node.change_state(new charging(m_node));
             return;
         }

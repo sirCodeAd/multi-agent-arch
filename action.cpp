@@ -44,7 +44,13 @@ namespace march
         m_node.print("Broadcasting message");
 
         message *new_message = new global_message("HELLO", m_node.get_information());
+        
+        // TEMPORARY
+        // Will be replaced by sending the message to the server which will then
+        // broadcast it to all nodes
+
         message_buffer.push_back(new_message);
+
     }
 
 }

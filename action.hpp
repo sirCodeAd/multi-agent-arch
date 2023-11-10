@@ -19,6 +19,9 @@ namespace march
     // ACTION SUPERCLASS
     // =========================================================
 
+    /**
+     * IMPLEMENTS STRATEGY PATTERN
+    */
     class action
     {
     public:

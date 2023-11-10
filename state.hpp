@@ -21,6 +21,9 @@ namespace march
     // STATE SUPERCLASS
     // =========================================================
 
+    /**
+     * IMPLEMENTS STATE PATTERN
+     */
     class state
     {
 
