@@ -9,21 +9,22 @@
 #include "information.hpp"
 #include "action.hpp"
 
-static int node_count = 0; // Used to assign unique IDs to nodes
+#include "painlessMesh.h"
 
 namespace march
 {
     class node
     {
     public:
-        node() : information(node_count++), state(new initialize(*this)), action_stack({}){};
+        node(painlessMesh &mesh) : state(new initialize(*this)), action_stack({}), m_mesh(mesh) { information = march::information(mesh.getNodeId()); };
         ~node() { delete state; };
 
     public:
-        void print(std::string message)
-        {
-            std::cout << "[ Node " << information.get_ID() << " ( STATE: " << get_state()->get_name() << " ) ]: " << message << std::endl;
-        }
+        // void print(std::string message) {std::cout << "[ Node" << information.get_ID() << " ( STATE: " << get_state()->get_name() << " ) ]: " << message << std::endl;}
+        void print(std::string message) { std::cout << "ID:\t\t" << get_information().get_ID() << "\n"
+                                                    << "Current State:\t" << get_state()->get_name() << "\n"
+                                                    << "Printing:\t" << message << "\n\n"
+                                                    << std::endl; }
 
     public:
         void add_action(march::action *action) { action_stack.push_back(action); };
@@ -51,6 +52,9 @@ namespace march
     private:
         march::information information;
         march::state *state;
+
+    public:
+        painlessMesh &m_mesh;
 
     private:
         std::vector<march::action *> action_stack;

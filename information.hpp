@@ -8,6 +8,7 @@ namespace march
     class information
     {
     public:
+        information(){}
         information(int ID_) : ID(ID_), battery_level(rand() % 100), destination(rand() % 100), position(rand() % 100){};
         ~information(){};
 

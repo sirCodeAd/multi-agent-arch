@@ -2,8 +2,10 @@
 
 #include "node.hpp"
 #include "message.hpp"
+#include "painlessMesh.h"
 
-extern std::vector<march::message *> message_buffer;
+extern painlessMesh mesh;
+extern std::vector<march::message*> message_buffer;
 
 namespace march
 {
@@ -15,7 +17,7 @@ namespace march
     {
         m_node.print("Updating beliefs");
 
-        // Eg. battery level, location, etc.
+        // // Eg. battery level, location, etc.
 
         for (auto &message : message_buffer)
         {
@@ -23,7 +25,7 @@ namespace march
             {
             case MESSAGE_TYPE::BROADCAST:
             {
-                auto broadcasted_message = dynamic_cast<march::global_message *>(message);
+                auto broadcasted_message = static_cast<march::global_message *>(message);
 
                 if (broadcasted_message->m_body == "DONE CHARGING")
                 {
@@ -55,14 +57,7 @@ namespace march
     void broadcast_message::execute()
     {
         m_node.print("Broadcasting message");
-
-        march::global_message *new_message = new march::global_message(m_message, m_message_type, m_node.get_information());
-
-        // TEMPORARY
-        // Will be replaced by sending the message to the server which will then
-        // broadcast it to all nodes
-
-        message_buffer.push_back(new_message);
+        mesh.sendBroadcast(m_message.c_str());
     }
 
     void move_to::execute()
