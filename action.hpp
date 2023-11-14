@@ -4,6 +4,7 @@
 #include <string>
 
 #include "message.hpp"
+#include "WString.h"
 
 namespace march
 {
@@ -15,6 +16,7 @@ namespace march
         UPDATE_BELIEFS,
         CHARGE_BATTERY,
         BROADCAST_MESSAGE,
+        RECIEVE_MESSAGE,
         MOVING
     };
 
@@ -42,6 +44,21 @@ namespace march
     // =========================================================
     // ACTION SUBCLASSES
     // =========================================================
+
+    class recieve_message : public action
+    {
+    public:
+        recieve_message(march::node &node, String message) : action(node, ACTION_TYPE::RECIEVE_MESSAGE), m_message(message){};
+        ~recieve_message(){};
+
+    public:
+        void execute();
+
+    private:
+        String m_message;
+    };
+
+    
 
     class update_beliefs : public action
     {

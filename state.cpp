@@ -4,58 +4,59 @@
 #include "node.hpp"
 #include "action.hpp"
 
+painlessMesh mesh;
+Scheduler userScheduler;
+
+void update_node()
+{
+    node->m_state->execute_state();
+    node->execute_stack();
+}
+
+Task task_update_node(TASK_SECOND * 1, TASK_FOREVER, &update_node);
+
 namespace march
 {
     // Initialize State =========================================================
 
-    auto initialize::update() -> void
+    auto initialize::execute_state() -> void
     {
-        m_node.print("Initializing, switching to idle state");
+        if (m_node.is_initialized)
+            return;
+
+        userScheduler.addTask(task_update_node);
+        task_update_node.enable();
+
+        mesh.init(MESH_PREFIX, MESH_PASSWORD, &userScheduler, MESH_PORT);
+
+        mesh.onReceive([this](uint32_t from, String &msg) { m_node.add_action(new recieve_message(m_node, msg)); });
+
+        m_node.m_information = information(mesh.getNodeId());
+        m_node.is_initialized = true;
+
+        m_node.print("Node initialized.");
+
+        m_node.add_action(new broadcast_message(m_node, MESSAGE_TYPE::BROADCAST, "Hello there!"));
+        m_node.execute_stack();
+
         m_node.change_state(new idle(m_node));
     }
 
     // Idle State =========================================================
 
-    auto idle::update() -> void
+    auto idle::execute_state() -> void
     {
-
-        if (m_node.get_information().get_battery_level() < m_node.get_information().get_destination())
-        {
-            m_node.print("Battery level is low, switching to charging state");
-            m_node.change_state(new charging(m_node));
-            return;
-        }
-
-        m_node.add_action(new march::update_beliefs(m_node));
+        m_node.print("Idle state.");
+        // m_node.add_action(new broadcast_message(m_node, MESSAGE_TYPE::BROADCAST, "Hello there!"));
     }
 
     // Charging State =========================================================
 
-    auto charging::update() -> void
+    auto charging::execute_state() -> void
     {
-        if (m_node.get_information().get_battery_level() >= m_node.get_information().get_destination())
-        {
-            m_node.print("Battery level is high enough, switching to idle state");
-            m_node.add_action(new march::broadcast_message(m_node, MESSAGE_TYPE::BROADCAST, "DONE CHARGING"));
-            m_node.change_state(new idle(m_node));
-
-            return;
-        }
-
-        m_node.add_action(new march::update_beliefs(m_node));
-        m_node.add_action(new march::charge_battery(m_node));
     }
 
-    auto moving::update() -> void
+    auto moving::execute_state() -> void
     {
-        if (m_node.get_information().get_position() == m_new_position)
-        {
-            m_node.print("Arrived at destination, switching to idle state");
-            m_node.change_state(new idle(m_node));
-            return;
-        }
-
-        m_node.add_action(new march::move_to(m_node, m_new_position));
-        m_node.add_action(new march::update_beliefs(m_node));
     }
 }

@@ -5,6 +5,10 @@
 
 #include "information.hpp"
 
+// TODO: Implement strategy pattern for message types, that will be used
+// in the execute() method of the message-related actions. The goal is to let the message itsself
+// form a JSON string/object which will be parsed by the receiver.
+
 namespace march
 {
     enum MESSAGE_TYPE

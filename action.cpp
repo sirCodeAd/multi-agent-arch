@@ -2,16 +2,30 @@
 
 #include "node.hpp"
 #include "message.hpp"
-#include "painlessMesh.h"
 
-extern painlessMesh mesh;
-extern std::vector<march::message*> message_buffer;
+extern std::vector<march::message *> message_buffer;
 
 namespace march
 {
     // =========================================================
     // ACTION SUBCLASSES
     // =========================================================
+
+    void recieve_message::execute()
+    {
+        m_node.print("Recieved message, will parse and add to buffer");
+
+        DynamicJsonDocument jsonBuffer(1024 + m_message.length());
+        DeserializationError error = deserializeJson(jsonBuffer, m_message);
+
+        if (error)
+        {
+            m_node.print("Failed to parse JSON message, deserialization error: " + std::string(error.c_str()));
+            return;
+        }
+
+        m_node.print("Recieved: " + jsonBuffer["body"]);
+    }
 
     void update_beliefs::execute()
     {
@@ -48,10 +62,10 @@ namespace march
     {
         // TEMPORARY
 
-        int new_battery_level = m_node.get_information().get_battery_level() + 10;
-        m_node.get_information().update_battery_level(new_battery_level);
+        int new_battery_level = m_node.m_information.get_battery_level() + 10;
+        m_node.m_information.update_battery_level(new_battery_level);
 
-        m_node.print("Battery level: " + std::to_string(m_node.get_information().get_battery_level()));
+        m_node.print("Battery level: " + std::to_string(m_node.m_information.get_battery_level()));
     }
 
     void broadcast_message::execute()
@@ -62,14 +76,14 @@ namespace march
 
     void move_to::execute()
     {
-        m_node.print("Moving closer to " + std::to_string(m_new_position) + " (current position: " + std::to_string(m_node.get_information().get_position()) + ")");
+        m_node.print("Moving closer to " + std::to_string(m_new_position) + " (current position: " + std::to_string(m_node.m_information.get_position()) + ")");
 
         int direction = 1;
 
-        if (m_new_position < m_node.get_information().get_position())
+        if (m_new_position < m_node.m_information.get_position())
             direction = -1;
 
-        m_node.get_information().update_position(m_node.get_information().get_position() + direction);
+        m_node.m_information.update_position(m_node.m_information.get_position() + direction);
     }
 
 }

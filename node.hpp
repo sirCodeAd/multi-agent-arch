@@ -1,6 +1,10 @@
 #if !defined(MARCH_NODE_H_)
 #define MARCH_NODE_H_
 
+#define MESH_PREFIX "dreamteamnetwork"
+#define MESH_PASSWORD "password"
+#define MESH_PORT 5555
+
 #include <string>
 #include <iostream>
 #include <vector>
@@ -11,53 +15,61 @@
 
 #include "painlessMesh.h"
 
+extern painlessMesh mesh;
+
 namespace march
 {
     class node
     {
     public:
-        node(painlessMesh &mesh) : state(new initialize(*this)), action_stack({}), m_mesh(mesh) { information = march::information(mesh.getNodeId()); };
-        ~node() { delete state; };
+        node() : m_state(new initialize(*this)), m_action_stack({}), m_messages({}), m_mesh(mesh){};
+        ~node()
+        {
+            delete m_state;
+            for (auto message : m_messages)
+                delete message;
+            for (auto action : m_action_stack)
+                delete action;
+        };
 
     public:
-        // void print(std::string message) {std::cout << "[ Node" << information.get_ID() << " ( STATE: " << get_state()->get_name() << " ) ]: " << message << std::endl;}
-        void print(std::string message) { std::cout << "ID:\t\t" << get_information().get_ID() << "\n"
-                                                    << "Current State:\t" << get_state()->get_name() << "\n"
+        void print(std::string message) { std::cout << "ID:\t\t" << m_information.get_ID() << "\n"
+                                                    << "Current State:\t" << m_state->get_name() << "\n"
                                                     << "Printing:\t" << message << "\n\n"
                                                     << std::endl; }
 
     public:
-        void add_action(march::action *action) { action_stack.push_back(action); };
+        void add_action(march::action *action) { m_action_stack.push_back(action); };
         void execute_stack()
         {
-
-            while (!action_stack.empty())
+            while (!m_action_stack.empty())
             {
-                action_stack.back()->execute();
-                delete action_stack.back();
-                action_stack.pop_back();
+                m_action_stack.back()->execute();
+                delete m_action_stack.back();
+                m_action_stack.pop_back();
             }
         };
 
         void change_state(march::state *new_state)
         {
-            delete state;
-            state = new_state;
+            delete m_state;
+            m_state = new_state;
         };
 
     public:
-        auto get_information() -> march::information & { return information; };
-        auto get_state() -> march::state * { return state; };
-
-    private:
-        march::information information;
-        march::state *state;
+        march::information m_information;
+        std::vector<march::message *> m_messages;
+        march::state *m_state;
 
     public:
         painlessMesh &m_mesh;
+        std::vector<march::action *> m_action_stack;
+
+    public:
+        bool is_initialized = false;
 
     private:
-        std::vector<march::action *> action_stack;
+        int lifetime = 0;
     };
 }
 

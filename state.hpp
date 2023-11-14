@@ -4,6 +4,10 @@
 #include <string>
 
 #include "action.hpp"
+#include "painlessMesh.h"
+
+extern Task task_update_node;
+extern march::node *node;
 
 namespace march
 {
@@ -34,7 +38,7 @@ namespace march
     public:
         STATE_TYPE get_type() const { return m_type; };
         virtual std::string get_name() const = 0;
-        virtual void update() = 0;
+        virtual void execute_state() = 0;
 
     protected:
         STATE_TYPE m_type;
@@ -52,7 +56,7 @@ namespace march
         ~initialize(){};
 
     public:
-        void update();
+        void execute_state();
         std::string get_name() const { return "INITIALIZE"; };
     };
 
@@ -65,7 +69,7 @@ namespace march
         ~idle(){};
 
     public:
-        void update();
+        void execute_state();
         std::string get_name() const { return "IDLE"; };
     };
 
@@ -78,7 +82,7 @@ namespace march
         ~charging(){};
 
     public:
-        void update();
+        void execute_state();
         std::string get_name() const { return "CHARGING"; };
     };
 
@@ -91,7 +95,7 @@ namespace march
         ~moving(){};
 
     public:
-        void update();
+        void execute_state();
         std::string get_name() const { return "MOVING TO " + std::to_string(m_new_position); };
 
     private:
