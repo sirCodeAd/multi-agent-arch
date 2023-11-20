@@ -8,12 +8,13 @@ namespace march
     class information
     {
     public:
-        information(int ID_) : ID(ID_), battery_level(rand() % 100), destination(rand() % 100), position(rand() % 100){};
+        information(int ID_) : ID(ID_), battery_level(rand() % 100), cargo_weight(rand() % 100), destination(rand() % 100), position(rand() % 100){};
         ~information(){};
 
     public:
         int get_ID() { return ID; };
         int get_battery_level() { return battery_level; };
+        int get_cargo_weight() { return cargo_weight; };
         int get_destination() { return destination; };
         int get_position() { return position; };
 
@@ -28,6 +29,7 @@ namespace march
     private:
         int ID;
         int battery_level;
+        int cargo_weight;
 
     private:
         int destination;

@@ -22,6 +22,9 @@ set(TARGET_SOURCE_FILES
     "action.hpp"
     "action.cpp"
 
+    "priority.hpp"
+    "priority.cpp"
+
 )
 
 add_library(${TARGET_NAME} OBJECT ${TARGET_SOURCE_FILES})

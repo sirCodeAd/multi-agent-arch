@@ -13,6 +13,7 @@ namespace march
     {
         INIT,
         IDLE,
+        CALCULATING,
         CHARGING,
         MOVE_TO
     };
@@ -69,6 +70,18 @@ namespace march
         std::string get_name() const { return "IDLE"; };
     };
 
+    // =========================================================
+
+    class calculating : public state
+    {
+    public:
+        calculating(node &node) : state(STATE_TYPE::CALCULATING, node){};
+        ~calculating(){};
+    
+    public:
+        void update();
+        std::string get_name() const { return "CALCULATING"; };
+    };
     // =========================================================
 
     class charging : public state

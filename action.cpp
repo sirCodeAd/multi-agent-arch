@@ -52,6 +52,16 @@ namespace march
         m_node.print("Battery level: " + std::to_string(m_node.get_information().get_battery_level()));
     }
 
+    void calculating_priority::execute()
+    {
+        m_node.print("Calculating priority");
+
+        double score = m_node.get_priority_score();
+        
+        m_node.print("Priority score: " + std::to_string(m_node.get_priority_score()));
+        
+    }
+
     void broadcast_message::execute()
     {
         m_node.print("Broadcasting message");

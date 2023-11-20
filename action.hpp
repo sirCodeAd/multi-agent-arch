@@ -13,6 +13,7 @@ namespace march
     enum ACTION_TYPE
     {
         UPDATE_BELIEFS,
+        CALCULATING_PRIO,
         CHARGE_BATTERY,
         BROADCAST_MESSAGE,
         MOVING
@@ -48,6 +49,16 @@ namespace march
     public:
         update_beliefs(march::node &node) : action(node, ACTION_TYPE::UPDATE_BELIEFS){};
         ~update_beliefs(){};
+
+    public:
+        void execute();
+    };
+
+    class calculating_priority : public action
+    {
+    public:
+        calculating_priority(march::node &node) : action(node, ACTION_TYPE::CALCULATING_PRIO){};
+        ~calculating_priority(){};
 
     public:
         void execute();

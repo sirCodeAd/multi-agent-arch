@@ -28,6 +28,20 @@ namespace march
 
         m_node.add_action(new march::update_beliefs(m_node));
     }
+    //Calculating State ======================================================
+
+    auto calculating::update() -> void
+    {
+        if(m_node.get_information().get_battery_level() < m_node.get_information().get_destination())
+        {
+            m_node.print("In need of charging, switching to calc state");
+            m_node.change_state(new calculating(m_node));
+            return;
+        }
+        
+        m_node.add_action(new march::update_beliefs(m_node));
+        m_node.add_action(new march::calculating_priority(m_node));
+    }
 
     // Charging State =========================================================
 
