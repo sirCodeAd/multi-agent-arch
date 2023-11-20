@@ -2,6 +2,7 @@
 
 #include "node.hpp"
 #include "message.hpp"
+#include "priority.hpp"
 
 extern std::vector<march::message *> message_buffer;
 
@@ -15,31 +16,32 @@ namespace march
     {
         m_node.print("Updating beliefs");
 
-        // Eg. battery level, location, etc.
+        // TODO: Update beliefs should be tasks that update certain beliefs,
+        //       but right now it does nothing.
 
         for (auto &message : message_buffer)
         {
-            switch (message->m_type)
+            if (message->m_type == MESSAGE_TYPE::HELLO)
             {
-            case MESSAGE_TYPE::BROADCAST:
-            {
-                auto broadcasted_message = dynamic_cast<march::global_message *>(message);
-
-                if (broadcasted_message->m_body == "DONE CHARGING")
-                {
-                    m_node.change_state(new march::moving(m_node, broadcasted_message->m_sender_information.get_position()));
-                    return;
-                }
-
-                break;
-            }
-
-            default:
-                break;
+                m_node.print("Received message: " + message->m_body);
             }
         }
 
         return;
+    }
+
+    void calc_priority::execute()
+    {
+        
+        m_node.print("Calculating priority");
+        double score = m_node.get_priority_score();
+        m_node.print("Priority score: " + std::to_string(score));
+
+        /*
+            Implementera logik genom användning av priority klassen
+        */
+       
+
     }
 
     void charge_battery::execute()
@@ -56,25 +58,14 @@ namespace march
     {
         m_node.print("Broadcasting message");
 
-        march::global_message *new_message = new march::global_message(m_message, m_message_type, m_node.get_information());
-
+        message *new_message = new global_message("HELLO", m_node.get_information());
+        
         // TEMPORARY
         // Will be replaced by sending the message to the server which will then
         // broadcast it to all nodes
 
         message_buffer.push_back(new_message);
-    }
 
-    void move_to::execute()
-    {
-        m_node.print("Moving closer to " + std::to_string(m_new_position) + " (current position: " + std::to_string(m_node.get_information().get_position()) + ")");
-
-        int direction = 1;
-
-        if (m_new_position < m_node.get_information().get_position())
-            direction = -1;
-
-        m_node.get_information().update_position(m_node.get_information().get_position() + direction);
     }
 
 }

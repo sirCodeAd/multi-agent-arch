@@ -13,8 +13,10 @@ namespace march
     {
         INIT,
         IDLE,
+        WAITING,
         CHARGING,
-        MOVE_TO
+        CALCULATING
+
     };
 
     // =========================================================
@@ -61,12 +63,15 @@ namespace march
     class idle : public state
     {
     public:
-        idle(node &node) : state(STATE_TYPE::IDLE, node){};
+        idle(node &node) : state(STATE_TYPE::IDLE, node) { start_idle(); };
         ~idle(){};
 
     public:
         void update();
         std::string get_name() const { return "IDLE"; };
+
+    private:
+        void start_idle();
     };
 
     // =========================================================
@@ -82,22 +87,17 @@ namespace march
         std::string get_name() const { return "CHARGING"; };
     };
 
-    // =========================================================
-
-    class moving : public state
+    class calculating : public state
     {
     public:
-        moving(node &node, int new_position) : state(STATE_TYPE::MOVE_TO, node), m_new_position(new_position){};
-        ~moving(){};
+        calculating(node &node) : state(STATE_TYPE::CALCULATING, node){};
+        ~calculating(){};
 
     public:
         void update();
-        std::string get_name() const { return "MOVING TO " + std::to_string(m_new_position); };
-
-    private:
-        int m_new_position;
+        std::string get_name() const { return "CALCULATING PRIORIY"; };
     };
-
+    
 }
 
 #endif // MARCH_STATE_H_

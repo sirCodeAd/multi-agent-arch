@@ -9,48 +9,34 @@ namespace march
 {
     enum MESSAGE_TYPE
     {
+        HELLO,
+        GOODBYE,
         REQUEST,
-        INFORM,
         RESPONSE,
-        BROADCAST
+        ERROR
     };
 
     class message
     {
     public:
         message(MESSAGE_TYPE type, std::string body) : m_type(type), m_body(body){};
-        virtual ~message() = default;
+        ~message();
 
     public:
         MESSAGE_TYPE m_type;
         std::string m_body;
     };
 
+    //subclass av message klassen
+
     class global_message : public message
     {
     public:
-        global_message(std::string body, MESSAGE_TYPE type, march::information sender_information)
-            : message(type, body), m_sender_information(sender_information){};
-
-        virtual ~global_message() = default;
+        global_message(std::string body, march::information sender_information) : message(MESSAGE_TYPE::HELLO, body), m_sender_information(sender_information){};
 
     public:
         march::information m_sender_information;
     };
-
-    class direct_message : public message
-    {
-    public:
-        direct_message(std::string body, MESSAGE_TYPE type, march::information sender_information, march::information receiver_information)
-            : message(type, body), m_sender_information(sender_information), m_receiver_information(receiver_information){};
-
-        virtual ~direct_message() = default;
-
-    public:
-        march::information m_sender_information;
-        march::information m_receiver_information;
-    };
-
 }
 
 #endif
