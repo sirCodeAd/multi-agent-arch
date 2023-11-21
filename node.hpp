@@ -48,7 +48,7 @@ namespace march
     public:
         auto get_information() -> march::information & { return information; };
         auto get_state() -> march::state * { return state; };
-        auto get_priority_score() -> double  {return node_priority->priority_score();};
+        auto get_priority_score() -> double {return node_priority->priority_score();};
 
 
     private:

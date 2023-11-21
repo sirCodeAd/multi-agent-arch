@@ -1,5 +1,8 @@
-#include "action.hpp"
+#include <iomanip>
+#include <iostream>
+#include <sstream>
 
+#include "action.hpp"
 #include "node.hpp"
 #include "message.hpp"
 
@@ -31,11 +34,24 @@ namespace march
                     return;
                 }
 
+                else if (broadcasted_message->m_body == "I NEED TO CHARGE")
+                {
+                    m_node.change_state(new march::calculating(m_node));
+                    return;
+                }
+
+                else if (broadcasted_message->m_body == "PRIORITY SCORE CALCULATED")
+                {
+                    m_node.change_state(new march::charging(m_node));
+                    return;
+                }
+
                 break;
             }
 
             default:
                 break;
+
             }
         }
 
@@ -54,11 +70,16 @@ namespace march
 
     void calculating_priority::execute()
     {
-        m_node.print("Calculating priority");
 
         double score = m_node.get_priority_score();
+
+        //used to limit number of decimals in score.
+        std::stringstream stream;
+        stream << std::fixed << std::setprecision(2) << score;
+        std::string score_stream = stream.str();
         
-        m_node.print("Priority score: " + std::to_string(m_node.get_priority_score()));
+        //m_node.print("Priority score: " + std::to_string(m_node.get_priority_score()));
+        m_node.print("Priority score: " + score_stream);
         
     }
 

@@ -5,7 +5,7 @@ namespace march
 {
     double priority::priority_score() {
 
-        // Implementation using march::node
+        // priority algorithm
 
         return (1.6 * (abs(m_node.get_information().get_position() - 
                 m_node.get_information().get_destination())) - 
