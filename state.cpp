@@ -31,7 +31,11 @@ namespace march
     //Calculating State ======================================================
 
     auto calculating::update() -> void
-    {
+    {       
+            m_node.print("Position: " + std::to_string(m_node.get_information().get_position()));
+            m_node.print("Destination: " + std::to_string(m_node.get_information().get_destination()));
+            m_node.print("Battery: " + std::to_string(m_node.get_information().get_battery_level()));
+            m_node.print("Distance: " + std::to_string(abs(m_node.get_information().get_position() - m_node.get_information().get_destination())));
             m_node.add_action(new march::update_beliefs(m_node));
             m_node.add_action(new march::calculating_priority(m_node));
             // return;

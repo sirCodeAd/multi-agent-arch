@@ -7,8 +7,9 @@ namespace march
 
         // Implementation using march::node
 
-        return (1.6 * m_node.get_information().get_destination()) - 
-                    (100 / (m_node.get_information().get_battery_level() + 1)) -
-                            (0.2 * m_node.get_information().get_cargo_weight());
+        return (1.6 * (abs(m_node.get_information().get_position() - 
+                m_node.get_information().get_destination())) - 
+                (100 / (m_node.get_information().get_battery_level() + 1)) - 
+                (0.2 * m_node.get_information().get_cargo_weight()));
     }
 }

@@ -11,6 +11,10 @@ int main(int, char **)
 
     march::node node_a = march::node();
     march::node node_b = march::node();
+    march::node node_c = march::node();
+    march::node node_d = march::node();
+    march::node node_e = march::node();
+    march::node node_f = march::node();
 
     int iterations = 0;
 
@@ -27,6 +31,28 @@ int main(int, char **)
 
         node_b.get_state()->update();
         node_b.execute_stack();
+
+        std::cout << std::endl;
+
+        node_c.get_state()->update();
+        node_c.execute_stack();
+
+        std::cout << std::endl;
+
+        node_d.get_state()->update();
+        node_d.execute_stack();
+
+        std::cout << std::endl;
+
+        node_e.get_state()->update();
+        node_e.execute_stack();
+
+        std::cout << std::endl;
+
+        node_f.get_state()->update();
+        node_f.execute_stack();
+
+
 
         // Clear message buffer
 
