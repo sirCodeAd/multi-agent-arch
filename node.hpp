@@ -17,7 +17,7 @@ namespace march
     class node
     {
     public:
-        node() : information(node_count++), state(new initialize(*this)), action_stack({}){};
+        node() : information(node_count++), state(new initialize(*this)), node_priority(new priority(*this)), action_stack({}){};
         ~node() { delete state; };
 
     public:
