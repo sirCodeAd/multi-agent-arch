@@ -22,10 +22,9 @@ namespace march
         if (m_node.get_information().get_battery_level() < m_node.get_information().get_destination())
         {
             m_node.print("Battery level is low, switching to calculating state");
-            m_node.add_action(new march::broadcast_message(m_node, MESSAGE_TYPE::BROADCAST, "I NEED TO CHARGE"));
-            m_node.add_action(new march::update_beliefs(m_node));
-            //m_node.change_state(new calculating(m_node));
-            //m_node.change_state(new calculating(m_node));
+            //m_node.add_action(new march::broadcast_message(m_node, MESSAGE_TYPE::BROADCAST, "I NEED TO CHARGE"));
+            m_node.change_state(new calculating(m_node));
+  
             return;
         }
 
@@ -36,16 +35,13 @@ namespace march
 
     auto calculating::update() -> void
     {       
-        
             m_node.print("Battery: " + std::to_string(m_node.get_information().get_battery_level()));
             m_node.print("Distance: " + std::to_string(abs(m_node.get_information().get_position() - m_node.get_information().get_destination())));
-            //m_node.add_action(new march::update_beliefs(m_node));
+
             m_node.add_action(new march::calculating_priority(m_node));
-            m_node.add_action(new march::broadcast_message(m_node, MESSAGE_TYPE::BROADCAST, "PRIORITY SCORE CALCULATED"));
-            m_node.add_action(new march::update_beliefs(m_node));
+            //m_node.add_action(new march::broadcast_message(m_node, MESSAGE_TYPE::BROADCAST, "PRIORITY SCORE CALCULATED"));
+            m_node.change_state(new charging(m_node));
             return;
-        
-        
         
     }
 

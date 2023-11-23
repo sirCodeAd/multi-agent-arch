@@ -24,30 +24,30 @@ namespace march
         {
             switch (message->m_type)
             {
-            case MESSAGE_TYPE::BROADCAST:
-            {
-                auto broadcasted_message = dynamic_cast<march::global_message *>(message);
-
-                if (broadcasted_message->m_body == "DONE CHARGING")
+                case MESSAGE_TYPE::BROADCAST:
                 {
-                    m_node.change_state(new march::moving(m_node, broadcasted_message->m_sender_information.get_position()));
-                    return;
-                }
+                    auto broadcasted_message = dynamic_cast<march::global_message *>(message);
 
-                else if (broadcasted_message->m_body == "I NEED TO CHARGE")
-                {
-                    m_node.change_state(new march::calculating(m_node));
-                    return;
-                }
+                    // if (broadcasted_message->m_body == "I NEED TO CHARGE")
+                    // {
+                    //     m_node.change_state(new march::calculating(m_node));
+                    //     return;
+                    // }
 
-                else if (broadcasted_message->m_body == "PRIORITY SCORE CALCULATED")
-                {
-                    m_node.change_state(new march::charging(m_node));
-                    return;
-                }
+                    if (broadcasted_message->m_body == "DONE CHARGING")
+                    {
+                        m_node.change_state(new march::moving(m_node, broadcasted_message->m_sender_information.get_position()));
+                        return;
+                    }
 
-                break;
-            }
+                    // else if (broadcasted_message->m_body == "PRIORITY SCORE CALCULATED")
+                    // {
+                    //     m_node.change_state(new march::charging(m_node));
+                    //     return;
+                    // }
+
+                    break;
+                }
 
             default:
                 break;

@@ -10,7 +10,7 @@ int main(int, char **)
 {
 
     march::node node_a = march::node();
-    // march::node node_b = march::node();
+    march::node node_b = march::node();
     // march::node node_c = march::node();
     // march::node node_d = march::node();
     // march::node node_e = march::node();
@@ -29,10 +29,10 @@ int main(int, char **)
 
         std::cout << std::endl;
 
-        // node_b.get_state()->update();
-        // node_b.execute_stack();
+        node_b.get_state()->update();
+        node_b.execute_stack();
 
-        // std::cout << std::endl;
+        std::cout << std::endl;
 
         // node_c.get_state()->update();
         // node_c.execute_stack();
